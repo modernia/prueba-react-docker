@@ -1,7 +1,7 @@
 import useData from '../hooks/useData'
 import useFetch from '../hooks/useFetch'
 
-export default function AppTest() {
+export default function AppTest () {
   const { data, loading, setPage, hasMore } = useData()
   const { lastElementRef } = useFetch({
     loading,

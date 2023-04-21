@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const URL = 'https://swapi.dev/api/'
 
-export default function App() {
+export default function App () {
   const [starships, setStarships] = useState()
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
