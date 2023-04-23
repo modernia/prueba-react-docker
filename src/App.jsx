@@ -1,47 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import useStarships from '../hooks/useStarships'
+import useLastItem from '../hooks/useLastItem'
 
-const URL = 'https://swapi.dev/api/'
-
-export default function App () {
-  const [starships, setStarships] = useState()
-  const [hasMore, setHasMore] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [page, setPage] = useState(1)
-
-  const observer = useRef()
-
-  useEffect(() => {
-    console.log(page)
-    setLoading(true)
-    fetch(`${URL}/starships?page=${page}`, {
-      method: 'GET'
-    }).then(res => res.json())
-      .then(res => {
-        setStarships([...(starships || []), ...res.results])
-        setHasMore(res.next !== null)
-        setLoading(false)
-      })
-  }, [page])
-
-  const lastElementRef = useCallback(node => {
-    console.log('node')
-
-    if (loading) return
-    if (observer.current) observer.current.disconnect()
-    observer.current = new window.IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1)
-      }
-    })
-    if (node) observer.current.observe(node)
-  }, [loading, hasMore])
+export default function AppTest() {
+  const { data, loading, setPage, hasMore } = useStarships()
+  const { lastElementRef } = useLastItem({
+    loading,
+    setPage,
+    hasMore
+  })
 
   return (
     <div className='app'>
       <h1>Star Wars Starships</h1>
       {
-        starships && starships.map((s, i) => {
-          const isLast = starships.length === i + 1
+        data && data.map((s, i) => {
+          const isLast = data.length === i + 1
 
           return isLast
             ? (
